@@ -5,7 +5,6 @@ Data Structures
 * Vectors
 * Lists
 * Maps
-* Sets
 * Sequences
 
 ## Collections
@@ -132,7 +131,7 @@ We write maps by enclosing alternating keys and values in curly braces, like so:
 {}
 ```
 
-Maps are useful because they can hold data in a way we normally think about it. Take our made up example, Sally Brown. A map can hold her first name and last name, her address, her favorite food, or anything else. It's a simple way to collect that data and make it easy to look up.
+Maps are useful because they can hold data in a way we normally think about it. Take our made up example, Sally Brown. A map can hold her first name and last name, her address, her favorite food, or anything else. It's a simple way to collect that data and make it easy to look up. That last example? It is an empty map. It is a map that is ready to hold some things, but doesn't have anything in it yet.
 
 Let's look at some functions we can use with maps:
 
@@ -169,6 +168,9 @@ Let's look at some functions we can use with maps:
 
 (vals {:first "Sally" :last "Brown"})
 ;=> ("Sally" "Brown")
+
+(into {} [[1 2] [3 4]])
+;=> {1 2, 3 4}
 ```
 
 We don't have nearly as many functions here in common as vectors and lists did. We still have `sequential?` and `associative?` to tell us what our collections are like. Note that `sequential?` is now false: maps don't hold things in a certain order.
@@ -179,7 +181,9 @@ We don't have nearly as many functions here in common as vectors and lists did. 
 
 We have `count`, like we have with every collection. Why do you think the answer is two? `count` is returning the number of associations.
 
-Lastly, we have `keys` and `vals`, which are pretty simple: they return the keys and values in the map. The order is not guaranteed, so we could have gotten `(:first :last)` or `(:last :first)`.
+Then we have `keys` and `vals`, which are pretty simple: they return the keys and values in the map. The order is not guaranteed, so we could have gotten `(:first :last)` or `(:last :first)`.
+
+The last one - into - works with any kind of collection. It takes everything from one collection and puts it into another one, so it's useful for converting from one type of collection to another.
 
 Let's look at one more thing about maps before we move on. You can always use `get` to get values out of maps, but you'll more often see something like the following:
 
@@ -200,67 +204,23 @@ You can use a keyword like you would use a function in order to look up values i
 Make a map representing yourself. Make sure it contains your first name and last name. Then, add your hometown to the map using `assoc` or `merge`.
 
 
-## Sets
-
-Sets are the last of the four major data structures in Clojure. Like lists and vectors, they are a collection of items, but unlike them, the collection is not ordered and can have no duplicate items. We write them using curly braces, like maps, but with a hash in front. Here are some examples of sets:
-
-```clj
-#{"earth" "mars" "venus"}
-#{1 4 9 16}
-#{}
-```
-
-Sets are useful for holding any data that cannot have duplicates: lists of people, for example. You can use them with set math, so you can find the intersection or the union of sets easily. Like our other collection types, they have many functions that can operate on them. Here's a few:
-
-
-```clj
-(set? #{"earth" "mars" "venus"})
-;=> true
-
-(sequential? #{"earth" "mars" "venus"})
-;=> false
-
-(associative? #{"earth" "mars" "venus"})
-;=> false
-
-(contains? #{"earth" "mars" "venus"} "earth")
-;=> true
-
-(set ["earth" "mars" "venus"])
-;=> #{1 2 3}
-
-(conj #{"earth" "mars" "venus"} "jupiter")
-;=> #{"earth" "mars" "venus" "jupiter"}
-
-(disj #{"earth" "mars" "venus"} "mars")
-;=> #{"earth" "venus"}
-
-(count #{"earth" "mars" "venus"})
-;=> 3
-```
-
-We have our standard set of predicate functions here. Note that both `sequential?` and `associative?` are false when using sets. Sets do not have keys and are in no particular order. We also have `contains?`, which lets us know if the set contains a particular value.
-
-The construction function `set` works differently than what we saw with `list`. If you remember, list took any number of arguments and put them in a list. `set` takes another collection and turns it into a set. Like other collections, we can use `conj` to create a new set with a value added. Sets also have the function `disj`, or "disjoin", which returns a new set with the specified value removed.
-
-
-### EXERCISE: Make a set
-
-Ask three or four people around you for their first names. Make a set of those names. What happens if you try to put the same first name in twice?
-
-Then, use `disj` to remove your name from the set.
-
-
 ## Sequences
 
 The reason you see the same functions used on different types of collections is because they are all _sequences_. (Technically, they all provide access to their elements as a sequence. While this is an important distinction for advanced Clojure developers, the simpler way of talking about sequences is useful at this stage.) A sequence is a Clojure abstraction, a unified way to look at many different types of collections. The data structures you've seen so far -- vectors, lists, maps, and sets -- are not the only things to be represented as sequences. Many other things, such as lists of files, lines of text, or records in a database, can be represented as sequences, and so you can use all sequence functions with them.
+
+Here is one example. The sequence function take makes a new sequence with the first so many items from a provided collection. 
+
+```clj
+(take 3 [1 2 3 4 5 6 7 8])
+;=> (1 2 3) 
+```
 
 We will see many other functions that can be used with sequences as we move forward.
 
 
 ## Collections of Collections
 
-Simple values such as numbers, keywords, and strings are not the only things you can put into a collection. You can also put other collections into collections, so you can have a vector of maps, or a list of sets, or whatever combination fits your data.
+Simple values such as numbers, keywords, and strings are not the only things you can put into a collection. You can also put other collections into collections, so you can have a vector of maps, or a list of vectors, or whatever combination fits your data.
 
 
 ### EXERCISE: Modeling your classmates
